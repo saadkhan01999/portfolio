@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ssamportfolio.netlify.app/sitemap.xml
