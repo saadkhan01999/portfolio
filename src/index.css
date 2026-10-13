@@ -486,6 +486,10 @@ html.theme-transition *::after {
   content-visibility: auto;
   contain-intrinsic-size: auto 1200px;
 }
+/* Set before in-page navigation (see lib/renderAll.js) so targets have real positions. */
+.render-all .defer-render {
+  content-visibility: visible;
+}
 
 /* Hero showcase: tilted 3D stack that follows the pointer (desktop only). */
 .showcase-layer {

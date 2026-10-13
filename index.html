@@ -7,7 +7,7 @@
     <title>Saad Bin Saeed Khan — Full Stack Developer (MERN)</title>
     <meta
       name="description"
-      content="Saad Bin Saeed Khan is a full-stack MERN developer in Pakistan building responsive web apps with React, Node.js, Express and MongoDB. See real projects and get in touch."
+      content="Saad Bin Saeed Khan is a full-stack MERN developer in Pakistan building custom software, web apps and mobile-responsive websites for businesses with React, Node.js, Express and MongoDB. See real projects and get a free quote."
     />
     <meta name="author" content="Saad Bin Saeed Khan" />
     <link rel="canonical" href="https://ssamportfolio.netlify.app/" />
@@ -27,7 +27,7 @@
     <meta property="og:title" content="Saad Bin Saeed Khan — Full Stack Developer (MERN)" />
     <meta
       property="og:description"
-      content="Full-stack web apps with React, Node.js, Express and MongoDB — from a multi-tenant pharmacy SaaS to a live restaurant platform."
+      content="Custom software, web apps and mobile-responsive websites for businesses — from an instalment &amp; retail system and a pharmacy SaaS to a live restaurant platform."
     />
     <meta property="og:image" content="https://ssamportfolio.netlify.app/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -37,7 +37,7 @@
     <meta name="twitter:title" content="Saad Bin Saeed Khan — Full Stack Developer (MERN)" />
     <meta
       name="twitter:description"
-      content="Full-stack web apps with React, Node.js, Express and MongoDB — from a multi-tenant pharmacy SaaS to a live restaurant platform."
+      content="Custom software, web apps and mobile-responsive websites for businesses — from an instalment &amp; retail system and a pharmacy SaaS to a live restaurant platform."
     />
     <meta name="twitter:image" content="https://ssamportfolio.netlify.app/og-image.jpg" />
 
@@ -52,7 +52,11 @@
         "email": "mailto:saadkhan01999@gmail.com",
         "address": { "@type": "PostalAddress", "addressCountry": "PK" },
         "alumniOf": { "@type": "CollegeOrUniversity", "name": "Abdul Wali Khan University" },
-        "knowsAbout": ["React", "Node.js", "Express", "MongoDB", "React Native", "Tailwind CSS", "REST APIs"],
+        "knowsAbout": ["Custom software", "Web applications", "Business websites", "React", "Node.js", "Express", "MongoDB", "React Native", "Tailwind CSS", "REST APIs"],
+        "hasCredential": [
+          { "@type": "EducationalOccupationalCredential", "name": "Full Stack Web Development", "recognizedBy": { "@type": "Organization", "name": "Digital Pakistan" } },
+          { "@type": "EducationalOccupationalCredential", "name": "Backend Development", "recognizedBy": { "@type": "Organization", "name": "Mindluster" } }
+        ],
         "sameAs": ["https://github.com/saadkhan01999", "https://www.linkedin.com/in/saadkhan01/"]
       }
     </script>
@@ -64,6 +68,8 @@
           var saved = localStorage.getItem('theme');
           var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.classList.toggle('dark', dark);
+          // Arriving on a #section link: render deferred sections so the jump lands on target.
+          if (location.hash.length > 1) document.documentElement.classList.add('render-all');
           document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#0B1020' : '#F7F8FC');
         } catch (e) {}
       })();

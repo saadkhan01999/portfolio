@@ -30,7 +30,7 @@ export default function Work() {
               Products I’ve designed, built <span className="text-gradient">and shipped.</span>
             </>
           }
-          intro="From a pharmacy SaaS with its own super admin console to a restaurant platform serving customers today. Open any project for the full case study."
+          intro="From an instalment & retail system and a pharmacy SaaS with its own super admin console to a restaurant platform serving customers today. Open any project for the full case study."
         />
 
         <FeaturedStack projects={featuredProjects} />

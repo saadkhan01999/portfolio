@@ -21,7 +21,7 @@ const fadeUp = (delay) => ({
 
 const STATS = [
   { value: projects.length, label: 'Projects built' },
-  { value: 2, label: 'SaaS & commerce platforms' },
+  { value: 3, label: 'Business platforms built' },
   { value: skillCount, label: 'Technologies in the toolkit' },
   { value: null, display: '2023', label: 'Building for the web since' },
 ];
@@ -32,7 +32,7 @@ function Showcase() {
   const ref = useRef(null);
   const ksf = projectById['ksf-pharmacy'].visual;
   const fb = projectById['feather-bone'].visual;
-  const chat = projectById['chat-app'].visual;
+  const adeena = projectById['adeena-traders'].visual;
 
   const onMove = (e) => {
     if (e.pointerType !== 'mouse') return;
@@ -59,8 +59,8 @@ function Showcase() {
         <button type="button" onClick={open('feather-bone')} aria-label="Open the Feather & Bone case study (featherbonepk.com)" className={`${layer} bottom-[6%] left-0 w-[72%]`} style={{ '--z': '30px' }}>
           <BrowserFrame image={fb.windows[0]} label="featherbonepk.com" dark sizes="(min-width: 1024px) 460px, 72vw" />
         </button>
-        <button type="button" onClick={open('chat-app')} aria-label="Open the Real-time Chat App case study" className={`${layer} bottom-0 right-[3%] w-[25%] rounded-[2rem]`} style={{ '--z': '90px' }}>
-          <PhoneFrame image={chat.phones[1]} className="float-slow" />
+        <button type="button" onClick={open('adeena-traders')} aria-label="Open the Adeena Traders case study" className={`${layer} bottom-0 right-[3%] w-[25%] rounded-[2rem]`} style={{ '--z': '90px' }}>
+          <PhoneFrame image={adeena.phones[0]} className="float-slow" />
         </button>
 
         <span aria-hidden="true" className="glass absolute right-[6%] top-0 hidden items-center gap-2 rounded-full px-3 py-1.5 text-[0.75rem] font-semibold text-fg shadow-lift sm:inline-flex" style={{ transform: 'translateZ(120px)' }}>
@@ -106,8 +106,8 @@ export default function Hero() {
           </h1>
 
           <m.p {...fadeUp(0.08)} className="mt-7 max-w-[36rem] text-lead text-fg-secondary">
-            From a multi-tenant pharmacy SaaS to a restaurant platform that’s live today — I design, build and ship the whole
-            product: React interfaces, Node.js APIs and MongoDB data.
+            Custom software, web apps and websites for businesses — from an instalment & retail system and a pharmacy SaaS
+            to a restaurant platform that’s live today. Designed, built and shipped end to end, and responsive on every screen.
           </m.p>
 
           <m.div {...fadeUp(0.16)} className="mt-9 flex flex-col gap-3 xs:flex-row xs:flex-wrap xs:items-center">

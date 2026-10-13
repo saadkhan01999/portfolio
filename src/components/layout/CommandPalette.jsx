@@ -18,6 +18,7 @@ import { projects } from '../../data/projects';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { closePalette, openCaseStudy } from '../../store/slices/uiSlice';
 import { useToggleTheme } from '../../hooks/useToggleTheme';
+import { renderAllSections } from '../../lib/renderAll';
 
 /**
  * ⌘K / Ctrl+K command palette: jump to a section, open a project case study,
@@ -36,7 +37,10 @@ export default function CommandPalette() {
   const [notice, setNotice] = useState('');
 
   const commands = useMemo(() => {
-    const go = (id) => () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const go = (id) => () => {
+      renderAllSections();
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
     const link = (href) => () => window.open(href, '_blank', 'noopener,noreferrer');
     const social = (icon) => socials.find((s) => s.icon === icon).href;
     return [

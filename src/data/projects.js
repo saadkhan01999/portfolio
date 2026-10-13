@@ -7,6 +7,8 @@ import { asset, phoneScreenshot, screenshot } from '../lib/images';
 //
 // `liveUrl: null` means there is no public link to show yet.
 // `theme` art-directs the featured card (always a dark panel, white text).
+// `visual.windows` takes view names (16:10) or { view, width, height } for
+// screens of another shape.
 
 const WIDE = { width: 1600, height: 900 };
 
@@ -18,6 +20,60 @@ export const filters = [
 ];
 
 const list = [
+  {
+    id: 'adeena-traders',
+    featured: true,
+    title: 'Adeena Traders',
+    tagline: 'Instalments, stock and cash — every rupee at a glance.',
+    category: 'Full-stack MERN · Instalment & retail',
+    filters: ['full-stack'],
+    year: '2026',
+    role: 'Full-stack development',
+    platforms: 'Desktop · Phone · A4 & 80 mm printers · English & Urdu',
+    summary:
+      'An instalment and retail management system for a multi-category retailer in Mardan, Pakistan: instalment sales, inventory, a digital wallet, bilingual English / Urdu agreements and print-ready documents.',
+    problem:
+      'A shop selling phones, appliances, furniture, solar systems and bikes on instalments has to know what every customer owes, what is late, what is in stock and where the money went — across cash, JazzCash, EasyPaisa and the bank. This system puts all of it in one place, on the counter PC or a phone.',
+    highlights: [
+      'Real-time dashboard: today’s sales, collections, expenses and profit, plus receivables, overdue instalments, stock value and what is owed to suppliers',
+      '6 and 12-month instalment plans — advance, monthly amount and due dates calculated by the server, with payments allocated to the oldest open instalment',
+      'Overdue, due-today and upcoming instalments with one-tap collect, a printed receipt or a WhatsApp reminder',
+      'Digital wallet for cash, JazzCash, EasyPaisa and bank transfers — money in, money out and the balance on every channel, with sales trends and sales by category',
+      'Category-first inventory with cost, cash and instalment prices and low-stock alerts',
+      'Print-ready A4 invoices, payment receipts and 80 mm thermal slips',
+      'Instalment, investor and partnership agreements in English and Urdu, with right-to-left Nastaliq set correctly',
+      'Admin, manager, accountant and salesman roles; hashed passwords, short-lived JWT sessions, rate-limited sign-in and an audit log',
+      'Five one-click themes — Royal Gold, Ocean Blue, Emerald Green, Crimson Red and Royal Purple',
+    ],
+    metrics: [
+      { value: '20+', label: 'screens across sales, stock, people and capital' },
+      { value: '5', label: 'one-click themes' },
+      { value: '2', label: 'languages — English and Urdu' },
+    ],
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
+    liveUrl: null,
+    theme: { from: '#070707', via: '#17120A', to: '#463413', glow: '#D4AF37', accent: '#F1D27B' },
+    visual: {
+      domain: 'Adeena Traders',
+      windows: [
+        { view: 'ui-dashboard', width: 1600, height: 778 },
+        { view: 'ui-inventory', width: 1600, height: 822 },
+      ],
+      phone: 'phone-dashboard',
+    },
+    gallery: [
+      screenshot('adeena-traders', 'cover', 'Adeena Traders slide reading “Installment & Retail Management System” beside the dashboard on desktop and phone, with 20+ screens, 5 themes, English and Urdu, and A4 and 80 mm printing', 'Installment & Retail Management System', WIDE),
+      screenshot('adeena-traders', 'sign-in', 'Adeena Traders sign-in page on desktop and phone with role selection, beside a list of security features', 'Secure, role-based sign-in', WIDE),
+      screenshot('adeena-traders', 'dashboard', 'Adeena Traders dashboard with today’s sales, collections, expenses, profit, receivables, overdue, stock value and supplier balances, and a low-stock alert', 'Every rupee of the business at a glance', WIDE),
+      screenshot('adeena-traders', 'wallet', 'Adeena Traders wallet with balances for cash, JazzCash, EasyPaisa and bank transfer, a sales-and-collection chart and sales by category', 'Digital wallet and analytics', WIDE),
+      screenshot('adeena-traders', 'inventory', 'Adeena Traders inventory with stock at cost, retail value, units and restocking alerts, category filters, the item table and the add-item dialog', 'Stock by category with low-stock alerts', WIDE),
+      screenshot('adeena-traders', 'installments', 'Adeena Traders installments page with overdue, due-today, next-3-days and later totals, and overdue customers with collect and WhatsApp actions', 'Instalment plans calculated to the rupee', WIDE),
+      screenshot('adeena-traders', 'documents', 'A payment receipt, an A4 instalment invoice with its payment schedule and an 80 mm thermal cash invoice from Adeena Traders', 'Invoices and receipts for A4 or the counter printer', WIDE),
+      screenshot('adeena-traders', 'agreements', 'Instalment sale agreement printed in English and Urdu beside the dashboard in Urdu mode', 'Agreements in English and Urdu', WIDE),
+      screenshot('adeena-traders', 'themes', 'The Adeena Traders dashboard in five themes: Royal Gold, Ocean Blue, Emerald Green, Crimson Red and Royal Purple', 'Five professional themes', WIDE),
+      screenshot('adeena-traders', 'mobile', 'Four phone screens of Adeena Traders: navigation menu, dashboard, wallet movements and installments', 'The whole shop in your pocket', WIDE),
+    ],
+  },
   {
     id: 'ksf-pharmacy',
     featured: true,
@@ -260,7 +316,9 @@ const resolveVisual = (p) => {
   const { windows = [], phones = [], phone, floating = [], domain } = p.visual;
   return {
     domain,
-    windows: windows.map((v) => screenshot(p.id, v, '', '')).filter(Boolean),
+    windows: windows
+      .map((w) => (typeof w === 'string' ? screenshot(p.id, w, '', '') : screenshot(p.id, w.view, '', '', { width: w.width, height: w.height })))
+      .filter(Boolean),
     phones: [...phones, ...(phone ? [phone] : [])].map((v) => phoneScreenshot(p.id, v, '', '')).filter(Boolean),
     floating: floating.map((f) => asset(p.id, f)).filter(Boolean),
   };

@@ -14,6 +14,7 @@ import Work from './components/sections/Work';
 import { useAppSelector } from './hooks/useAppDispatch';
 import { useCaseStudyUrl } from './hooks/useCaseStudyUrl';
 import { usePaletteShortcut } from './hooks/usePaletteShortcut';
+import { useRenderAllOnNavigate } from './hooks/useRenderAllOnNavigate';
 import { useSpotlightTracking } from './hooks/useSpotlightTracking';
 import { useThemeSync } from './hooks/useThemeSync';
 import { store } from './store/store';
@@ -36,6 +37,7 @@ function AppContent() {
   useSpotlightTracking();
   usePaletteShortcut();
   useCaseStudyUrl();
+  useRenderAllOnNavigate();
   const paletteNeeded = useLatch(useAppSelector((st) => st.ui.paletteOpen));
   const caseStudyNeeded = useLatch(useAppSelector((st) => st.ui.caseStudyId));
 

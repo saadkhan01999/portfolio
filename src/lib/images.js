@@ -40,3 +40,27 @@ export function phoneScreenshot(project, view, alt, caption = alt) {
 export function asset(project, file) {
   return url(project, file) ?? null;
 }
+
+// Certificates live in src/assets/certificates/<id>-<width>.webp.
+const certificateFiles = import.meta.glob('../assets/certificates/*.webp', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+/** Certificate scan in two widths, ready for <img> and the lightbox. */
+export function certificateImage(id, widths, size, alt, caption = alt) {
+  const urls = widths.map((w) => certificateFiles[`../assets/certificates/${id}-${w}.webp`]);
+  if (urls.some((u) => !u)) {
+    if (import.meta.env.DEV) console.warn(`[images] missing certificate ${id}`);
+    return null;
+  }
+  return {
+    src: urls[urls.length - 1],
+    srcSet: urls.map((u, i) => `${u} ${widths[i]}w`).join(', '),
+    ...size,
+    alt,
+    caption,
+    orientation: 'landscape',
+  };
+}

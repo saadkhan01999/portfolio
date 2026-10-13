@@ -1,4 +1,4 @@
-import { ArrowUp, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { navItems, profile, RESUME_URL } from '../../data/profile';
 import { featuredProjects } from '../../data/projects';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
@@ -20,7 +20,7 @@ export default function Footer() {
               <span className="font-display text-[1.0625rem] font-bold">{profile.name}</span>
             </a>
             <p className="mt-4 max-w-sm text-caption text-fg-secondary">
-              {profile.role} ({profile.stack}) building SaaS platforms, commerce suites and dashboards. Based in {profile.location}.
+              {profile.role} ({profile.stack}) building custom software, web apps and websites for businesses. Based in {profile.location}.
             </p>
             <SocialLinks className="mt-6" />
           </div>
@@ -71,23 +71,12 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Oversized wordmark, cropped by the footer edge. */}
-      <p
-        aria-hidden="true"
-        className="text-gradient pointer-events-none mt-10 select-none text-center font-display text-[clamp(4rem,17vw,16rem)] font-extrabold leading-[0.8] tracking-[-0.06em] opacity-90"
-      >
-        Saad Khan
-      </p>
-
       <div className="container-page">
-        <div className="flex flex-col-reverse gap-4 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* Right padding keeps the text clear of the floating back-to-top button. */}
+        <div className="mt-14 border-t border-line py-7 pr-20">
           <p className="text-[0.8125rem] text-fg-muted">
             © {year} {profile.name}. Designed and built by me — React, Tailwind CSS and Vite.
           </p>
-          <a href="#home" className="btn-ghost -ml-3 self-start text-caption sm:ml-0 sm:self-auto">
-            <ArrowUp size={16} aria-hidden="true" />
-            Back to top
-          </a>
         </div>
       </div>
     </footer>
