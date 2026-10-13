@@ -1,143 +1,165 @@
+import { useRef } from 'react';
 import { m } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Download, MapPin } from 'lucide-react';
+import { ArrowRight, Download, Sparkles } from 'lucide-react';
 import profileJpg from '../../assets/profile.jpg';
 import profileWebp from '../../assets/profile.webp';
-import { profile, RESUME_URL } from '../../data/profile';
-import { coreStack } from '../../data/skills';
+import { heroWords, profile, RESUME_URL } from '../../data/profile';
+import { projectById, projects } from '../../data/projects';
+import { marquee, skillCount } from '../../data/skills';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { openCaseStudy } from '../../store/slices/uiSlice';
+import { BrowserFrame, PhoneFrame } from '../ui/DeviceFrames';
+import { Aurora, CountUp, Marquee, WordRotator } from '../ui/Effects';
 import SocialLinks from '../ui/SocialLinks';
+import { paletteShortcut } from '../../lib/platform';
 
 const fadeUp = (delay) => ({
-  initial: { opacity: 0, y: 12 },
+  initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
 });
 
-const FACTS = [
-  { label: 'Full stack', value: 'React · Node.js · Express · MongoDB' },
-  { label: 'Mobile', value: 'React Native with Expo' },
-  { label: 'Education', value: 'MS / MPhil, Computer Science' },
-  { label: 'Based in', value: 'Pakistan · UTC+5' },
+const STATS = [
+  { value: projects.length, label: 'Projects built' },
+  { value: 3, label: 'Business platforms built' },
+  { value: skillCount, label: 'Technologies in the toolkit' },
+  { value: null, display: '2023', label: 'Building for the web since' },
 ];
+
+/** Layered, cursor-reactive composition of real product screens. */
+function Showcase() {
+  const dispatch = useAppDispatch();
+  const ref = useRef(null);
+  const ksf = projectById['ksf-pharmacy'].visual;
+  const fb = projectById['feather-bone'].visual;
+  const adeena = projectById['adeena-traders'].visual;
+
+  const onMove = (e) => {
+    if (e.pointerType !== 'mouse') return;
+    const r = ref.current.getBoundingClientRect();
+    ref.current.style.setProperty('--rx', `${((e.clientX - r.left) / r.width - 0.5) * 8}deg`);
+    ref.current.style.setProperty('--ry', `${((e.clientY - r.top) / r.height - 0.5) * -8}deg`);
+  };
+  const reset = () => {
+    ref.current.style.setProperty('--rx', '0deg');
+    ref.current.style.setProperty('--ry', '0deg');
+  };
+
+  const open = (id) => () => dispatch(openCaseStudy(id));
+  const layer = 'showcase-layer absolute block rounded-xl hover:z-20 focus-visible:z-20';
+
+  return (
+    <div ref={ref} onPointerMove={onMove} onPointerLeave={reset} className="relative [perspective:1800px]">
+      <div
+        className="showcase-3d relative mx-auto aspect-[10/9] w-full max-w-[40rem] transition-transform duration-500 ease-out [transform-style:preserve-3d]"
+      >
+        <button type="button" onClick={open('ksf-pharmacy')} aria-label="Open the KSF Pharmacy System case study" className={`${layer} right-0 top-[4%] w-[80%]`} style={{ '--z': '-40px' }}>
+          <BrowserFrame image={ksf.windows[0]} label="KSF Pharmacy System" sizes="(min-width: 1024px) 520px, 80vw" />
+        </button>
+        <button type="button" onClick={open('feather-bone')} aria-label="Open the Feather & Bone case study (featherbonepk.com)" className={`${layer} bottom-[6%] left-0 w-[72%]`} style={{ '--z': '30px' }}>
+          <BrowserFrame image={fb.windows[0]} label="featherbonepk.com" dark sizes="(min-width: 1024px) 460px, 72vw" />
+        </button>
+        <button type="button" onClick={open('adeena-traders')} aria-label="Open the Adeena Traders case study" className={`${layer} bottom-0 right-[3%] w-[25%] rounded-[2rem]`} style={{ '--z': '90px' }}>
+          <PhoneFrame image={adeena.phones[0]} className="float-slow" />
+        </button>
+
+        <span aria-hidden="true" className="glass absolute right-[6%] top-0 hidden items-center gap-2 rounded-full px-3 py-1.5 text-[0.75rem] font-semibold text-fg shadow-lift sm:inline-flex" style={{ transform: 'translateZ(120px)' }}>
+          <span className="h-2 w-2 rounded-full bg-[#10B981]" /> SaaS · 2 apps in one
+        </span>
+        <span aria-hidden="true" className="glass absolute bottom-[1%] left-[6%] hidden items-center gap-2 rounded-full px-3 py-1.5 text-[0.75rem] font-semibold text-fg shadow-lift sm:inline-flex" style={{ transform: 'translateZ(140px)' }}>
+          <span className="relative h-2 w-2 rounded-full bg-[#F5B21B] text-[#F5B21B] pulse-dot" /> Live · featherbonepk.com
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
   return (
-    <section id="home" aria-labelledby="hero-title" className="relative isolate overflow-hidden pt-[var(--header-h)]">
-      {/* Restrained backdrop: a soft wash and a faint grid that fades out. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_75%_0%,rgb(var(--c-accent)/0.12),transparent_70%),radial-gradient(40%_40%_at_0%_30%,rgb(var(--c-accent-2)/0.08),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgb(var(--c-border))_1px,transparent_1px),linear-gradient(90deg,rgb(var(--c-border))_1px,transparent_1px)] bg-[size:64px_64px] opacity-50 [mask-image:radial-gradient(70%_60%_at_50%_0%,black,transparent)]" />
-      </div>
+    <section id="home" aria-labelledby="hero-title" className="noise relative isolate overflow-hidden pt-[var(--header-h)]">
+      <Aurora className="-z-10" />
+      <div aria-hidden="true" className="grid-lines absolute inset-0 -z-10 opacity-70" />
 
-      <div className="container-page grid items-center gap-x-12 gap-y-14 pb-16 pt-12 sm:pt-16 lg:min-h-[min(54rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:pb-20 lg:pt-10">
-        <div className="min-w-0 lg:col-span-7">
-          <m.p {...fadeUp(0)} className="mb-7 inline-flex items-center gap-2.5 rounded-2xl border xs:rounded-full border-line bg-surface/80 py-1.5 pl-2.5 pr-3.5 text-caption font-medium text-fg-secondary shadow-card">
-            <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-              <span className="absolute inset-0 rounded-full bg-teal/30" />
-              <span className="relative m-auto h-1.5 w-1.5 rounded-full bg-teal" />
-            </span>
+      <div className="container-page grid items-center gap-x-10 gap-y-14 pb-14 pt-10 sm:pt-14 lg:min-h-[min(56rem,calc(100svh-var(--header-h)))] lg:grid-cols-12 lg:pb-16 lg:pt-6">
+        <div className="relative z-10 min-w-0 lg:col-span-6">
+          <m.p {...fadeUp(0)} className="glass mb-8 inline-flex items-center gap-3 rounded-full py-1.5 pl-1.5 pr-4 text-caption font-medium text-fg-secondary shadow-card">
+            <picture>
+              <source srcSet={profileWebp} type="image/webp" />
+              <img src={profileJpg} alt="" width="343" height="477" className="h-8 w-8 rounded-full object-cover object-top" />
+            </picture>
+            <span className="relative h-2 w-2 rounded-full bg-teal text-teal pulse-dot" aria-hidden="true" />
             {profile.availability}
           </m.p>
 
-          <h1 id="hero-title" className="text-display font-extrabold">
-            <span className="block">Saad Bin</span>
-            <span className="block">Saeed Khan</span>
-            <span className="mt-5 block max-w-[22ch] text-[clamp(1.35rem,2.7vw,2.25rem)] font-semibold leading-[1.15] tracking-[-0.02em] text-fg-secondary">
-              {profile.role} building reliable web apps.
+          <h1 id="hero-title">
+            <span className="block font-sans text-[clamp(1rem,1.5vw,1.2rem)] font-semibold tracking-normal text-fg-secondary">
+              {profile.name} <span className="text-fg-muted">·</span> {profile.role}
+            </span>
+            <span className="mt-4 block text-[clamp(2.1rem,4.7vw,4.5rem)] font-extrabold leading-[1.04] tracking-[-0.045em]">
+              I build
+              <br />
+              <WordRotator words={heroWords} />
+              <span className="sr-only">web products</span>
+              <br />
+              that businesses run{'\u00A0'}on.
             </span>
           </h1>
 
           <m.p {...fadeUp(0.08)} className="mt-7 max-w-[36rem] text-lead text-fg-secondary">
-            I design and build complete web products with React, Node.js, Express and MongoDB — from responsive,
-            accessible interfaces to the APIs and data models behind them.
+            Custom software, web apps and websites for businesses — from an instalment & retail system and a pharmacy SaaS
+            to a restaurant platform that’s live today. Designed, built and shipped end to end, and responsive on every screen.
           </m.p>
 
           <m.div {...fadeUp(0.16)} className="mt-9 flex flex-col gap-3 xs:flex-row xs:flex-wrap xs:items-center">
-            <a href="#projects" className="btn-primary group">
-              View my projects
-              <ArrowRight size={18} aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            <a href="#work" className="btn-primary group h-12 px-6">
+              Explore my work
+              <ArrowRight size={18} aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1" />
             </a>
-            <a href="#contact" className="btn-secondary">
-              Let’s work together
+            <a href="#contact" className="btn-secondary h-12 px-6">
+              <Sparkles size={17} aria-hidden="true" />
+              Start a project
             </a>
-            <a href={RESUME_URL} download="Saad-Bin-Saeed-Khan-Resume.pdf" className="btn-ghost">
+            <a href={RESUME_URL} download="Saad-Bin-Saeed-Khan-Resume.pdf" className="btn-ghost h-12">
               <Download size={18} aria-hidden="true" />
               Résumé <span className="sr-only">(PDF)</span>
             </a>
           </m.div>
 
-          <m.div {...fadeUp(0.24)} className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
-            <SocialLinks className="shrink-0 flex-nowrap" />
-            <span className="hidden h-8 w-px bg-line sm:block" aria-hidden="true" />
-            <ul className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.78rem] text-fg-muted" aria-label="Core stack">
-              {coreStack.map((s, i) => (
-                <li key={s} className="flex items-center gap-3">
-                  {i > 0 && <span aria-hidden="true" className="text-line-strong">/</span>}
-                  {s}
-                </li>
-              ))}
-            </ul>
+          <m.div {...fadeUp(0.24)} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <SocialLinks className="flex-nowrap" />
+            <p className="hidden items-center gap-2 text-caption text-fg-muted [@media(pointer:fine)]:flex">
+              Press <kbd className="kbd">{paletteShortcut}</kbd> to explore
+            </p>
           </m.div>
         </div>
 
-        <m.figure
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-[17rem] sm:max-w-[22rem] lg:col-span-5 lg:mr-0 lg:max-w-[24rem]"
+        <m.div
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="relative min-w-0 lg:col-span-6"
         >
-          <div className="rounded-[1.75rem] border border-line bg-surface p-2 shadow-lift">
-            <picture>
-              <source srcSet={profileWebp} type="image/webp" />
-              <img
-                src={profileJpg}
-                width="343"
-                height="477"
-                alt="Portrait of Saad Bin Saeed Khan in a light grey suit"
-                // React 18 only passes the lowercase attribute through without a warning.
-                // eslint-disable-next-line react/no-unknown-property
-                fetchpriority="high"
-                decoding="async"
-                className="aspect-[343/477] w-full rounded-[1.375rem] object-cover"
-              />
-            </picture>
-          </div>
-
-          <figcaption className="absolute -bottom-5 left-4 right-4 flex items-center gap-2 rounded-2xl border border-line bg-surface-elevated px-4 py-3 text-caption text-fg-secondary shadow-lift sm:-left-6 sm:right-auto sm:bottom-auto sm:top-8">
-            <MapPin size={16} aria-hidden="true" className="shrink-0 text-accent-fg" />
-            <span>
-              Based in <strong className="font-semibold text-fg">{profile.location}</strong> · open to remote work
-            </span>
-          </figcaption>
-
-          <a
-            href="#project-feather-bone"
-            className="group absolute -bottom-6 -right-3 hidden max-w-[13.5rem] rounded-2xl border border-line bg-surface-elevated p-4 shadow-lift transition-transform duration-300 hover:-translate-y-0.5 sm:block lg:-right-8"
-          >
-            <span className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-fg-muted">Latest project</span>
-            <span className="mt-1 flex items-center gap-1 font-display text-[1rem] font-bold text-fg">
-              Feather &amp; Bone
-              <ArrowUpRight size={16} aria-hidden="true" className="text-accent-fg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </span>
-            <span className="mt-1 block text-[0.8125rem] leading-snug text-fg-secondary">
-              Storefront, POS and kitchen display on one API
-            </span>
-          </a>
-        </m.figure>
+          <Showcase />
+        </m.div>
       </div>
 
       <div className="container-page">
-        <dl className="grid grid-cols-1 border-b border-line xs:grid-cols-2 lg:grid-cols-4">
-          {FACTS.map((f) => (
+        <dl className="glass grid grid-cols-2 overflow-hidden rounded-3xl shadow-card lg:grid-cols-4">
+          {STATS.map((s, i) => (
             <div
-              key={f.label}
-              className="border-t border-line py-5 pr-4 xs:odd:pl-0 xs:even:border-l xs:even:pl-5 lg:[&:nth-child(3)]:border-l lg:[&:nth-child(3)]:pl-5"
+              key={s.label}
+              className={`flex flex-col p-5 sm:p-7 ${i % 2 === 1 ? 'border-l border-line' : ''} ${i > 1 ? 'border-t border-line lg:border-t-0' : ''} ${i === 2 ? 'lg:border-l' : ''}`}
             >
-              <dt className="font-mono text-[0.75rem] uppercase tracking-[0.14em] text-fg-muted">{f.label}</dt>
-              <dd className="mt-1.5 font-medium text-fg">{f.value}</dd>
+              <dt className="order-2 mt-1 text-caption text-fg-secondary">{s.label}</dt>
+              <dd className="order-1 font-display text-[clamp(2rem,4vw,3.25rem)] font-extrabold leading-none tracking-[-0.04em]">
+                {s.value === null ? <span className="text-gradient">{s.display}</span> : <CountUp value={s.value} className="text-gradient" />}
+              </dd>
             </div>
           ))}
         </dl>
       </div>
+
+      <Marquee items={marquee} className="mt-14 border-y border-line bg-surface/40 py-5 backdrop-blur-sm" />
     </section>
   );
 }

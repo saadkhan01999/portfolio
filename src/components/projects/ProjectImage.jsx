@@ -2,15 +2,19 @@ import { useState } from 'react';
 import { ImageOff } from 'lucide-react';
 
 /**
- * Screenshot with a stable aspect ratio (no layout shift), lazy loading and a
- * designed fallback when the file is missing or fails to load.
+ * Image in a frame of fixed aspect ratio (no layout shift), lazy loaded, with a
+ * designed fallback. The frame defaults to the image's own ratio; when a
+ * different `aspect` is forced (e.g. in a carousel), images of another shape
+ * are letterboxed instead of cropped.
  */
-export default function ProjectImage({ image, title, sizes, eager = false, className = '', imgClassName = '' }) {
+export default function ProjectImage({ image, title, sizes, aspect, eager = false, className = '', imgClassName = '' }) {
   const [failed, setFailed] = useState(false);
-  const portrait = image?.orientation === 'portrait';
+  const own = image ? image.width / image.height : 1.6;
+  const frame = aspect ?? own;
+  const fits = Math.abs(frame - own) < 0.02;
 
   return (
-    <div className={`relative aspect-[16/10] overflow-hidden bg-surface-sunken ${className}`}>
+    <div className={`relative overflow-hidden bg-surface-sunken ${className}`} style={{ aspectRatio: frame }}>
       {image && !failed ? (
         <img
           src={image.src}
@@ -22,7 +26,7 @@ export default function ProjectImage({ image, title, sizes, eager = false, class
           loading={eager ? 'eager' : 'lazy'}
           decoding="async"
           onError={() => setFailed(true)}
-          className={`h-full w-full ${portrait ? 'object-contain py-4' : 'object-cover object-top'} ${imgClassName}`}
+          className={`h-full w-full ${fits ? 'object-cover object-top' : 'object-contain p-3'} ${imgClassName}`}
         />
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-6 text-center text-fg-muted">

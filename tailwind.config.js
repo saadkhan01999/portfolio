@@ -39,6 +39,7 @@ export default {
         DEFAULT: token('accent-2'),
         fg: token('accent-2-text'),
       },
+      violet: token('accent-3'),
       focus: token('focus-ring'),
       danger: token('danger'),
       success: token('success'),

@@ -4,6 +4,7 @@ import { contact, profile, socials } from '../../data/profile';
 import { mailtoHref, PROJECT_TYPES, sendMessage, SUBMIT_MODE } from '../../lib/contact';
 import Reveal from '../ui/Reveal';
 import SectionHeading from '../ui/SectionHeading';
+import { Aurora } from '../ui/Effects';
 
 const INITIAL = { name: '', email: '', projectType: '', message: '' };
 const MESSAGE_MIN = 20;
@@ -115,21 +116,27 @@ export default function Contact() {
   const messageLength = values.message.trim().length;
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="section border-t border-line bg-surface-sunken/60">
+    <section id="contact" aria-labelledby="contact-title" className="section noise relative isolate overflow-hidden border-t border-line">
+      <Aurora className="-z-10 opacity-80" />
       <div className="container-page">
         <SectionHeading
           id="contact-title"
+          index="06"
           eyebrow="Contact"
-          title="Have a project in mind? Let’s talk."
+          title={
+            <>
+              Have a project in mind? <span className="text-gradient">Let’s build it.</span>
+            </>
+          }
           intro="Tell me what you’re building — a new product, a redesign, an API, or a role on your team. I’ll reply with questions and next steps."
         />
 
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
           <Reveal className="lg:col-span-5">
-            <ul className="card divide-y divide-line">
+            <ul className="glass divide-y divide-line overflow-hidden rounded-[1.75rem] shadow-card">
               {CHANNELS.map(({ icon: IconCmp, label, value, href, external }) => (
                 <li key={label} className="flex items-center gap-4 p-5">
-                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-subtle text-accent-fg">
+                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white" style={{ backgroundImage: 'var(--grad-brand)' }}>
                     <IconCmp size={20} aria-hidden="true" />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -151,7 +158,7 @@ export default function Contact() {
                 </li>
               ))}
             </ul>
-            <div className="mt-5 flex items-start gap-3 rounded-2xl border border-line bg-surface p-5">
+            <div className="glass mt-5 flex items-start gap-3 rounded-2xl p-5">
               <span className="relative mt-1.5 flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
                 <span className="absolute inset-0 rounded-full bg-teal/30" />
                 <span className="relative m-auto h-1.5 w-1.5 rounded-full bg-teal" />
@@ -163,7 +170,7 @@ export default function Contact() {
           </Reveal>
 
           <Reveal delay={0.08} className="lg:col-span-7">
-            <div className="card p-6 sm:p-8">
+            <div className="card rounded-[1.75rem] p-6 shadow-lift sm:p-8">
               {status === 'success' ? (
                 <div ref={statusRef} tabIndex={-1} role="status" className="py-8 text-center focus:outline-none">
                   <CheckCircle2 size={44} aria-hidden="true" className="mx-auto text-success" />

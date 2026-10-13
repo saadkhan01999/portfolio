@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 /**
- * Full-screen screenshot viewer on the native <dialog> element: the browser
+ * Full-screen image viewer (screenshots, certificates) on the native <dialog> element: the browser
  * provides the modal focus trap, inert background and Escape-to-close.
  * `state` is { images, index, title } or null.
  */
-export default function Lightbox({ state, onClose, onNavigate }) {
+export default function Lightbox({ state, onClose, onNavigate, lockScroll = true, kind = 'screenshot' }) {
   const dialogRef = useRef(null);
   const returnFocusRef = useRef(null);
   const pointerStart = useRef(null);
@@ -18,15 +18,16 @@ export default function Lightbox({ state, onClose, onNavigate }) {
     if (open && !dialog.open) {
       returnFocusRef.current = document.activeElement;
       dialog.showModal();
-      document.documentElement.style.overflow = 'hidden';
+      if (lockScroll) document.documentElement.style.overflow = 'hidden';
+      dialog.querySelector('[data-autofocus]')?.focus();
     } else if (!open && dialog.open) {
       dialog.close();
     }
     return undefined;
-  }, [open]);
+  }, [open, lockScroll]);
 
   const handleClose = () => {
-    document.documentElement.style.overflow = '';
+    if (lockScroll) document.documentElement.style.overflow = '';
     onClose();
     returnFocusRef.current?.focus?.();
   };
@@ -70,10 +71,10 @@ export default function Lightbox({ state, onClose, onNavigate }) {
             </h2>
             <button
               type="button"
-              autoFocus
+              data-autofocus
               onClick={() => dialogRef.current?.close()}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-white"
-              aria-label="Close screenshot viewer"
+              aria-label={`Close ${kind} viewer`}
             >
               <X size={20} aria-hidden="true" />
             </button>
@@ -103,7 +104,7 @@ export default function Lightbox({ state, onClose, onNavigate }) {
                 <button
                   type="button"
                   onClick={() => go(-1)}
-                  aria-label="Previous screenshot"
+                  aria-label={`Previous ${kind}`}
                   className="absolute left-2 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-white sm:inline-flex"
                 >
                   <ChevronLeft size={22} aria-hidden="true" />
@@ -111,7 +112,7 @@ export default function Lightbox({ state, onClose, onNavigate }) {
                 <button
                   type="button"
                   onClick={() => go(1)}
-                  aria-label="Next screenshot"
+                  aria-label={`Next ${kind}`}
                   className="absolute right-2 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-white sm:inline-flex"
                 >
                   <ChevronRight size={22} aria-hidden="true" />
@@ -125,7 +126,7 @@ export default function Lightbox({ state, onClose, onNavigate }) {
               <button
                 type="button"
                 onClick={() => go(-1)}
-                aria-label="Previous screenshot"
+                aria-label={`Previous ${kind}`}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white"
               >
                 <ChevronLeft size={20} aria-hidden="true" />
@@ -133,7 +134,7 @@ export default function Lightbox({ state, onClose, onNavigate }) {
               <button
                 type="button"
                 onClick={() => go(1)}
-                aria-label="Next screenshot"
+                aria-label={`Next ${kind}`}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white"
               >
                 <ChevronRight size={20} aria-hidden="true" />

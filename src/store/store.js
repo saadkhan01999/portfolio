@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import themeSlice from './slices/themeSlice';
-import portfolioSlice from './slices/portfolioSlice';
+import uiSlice from './slices/uiSlice';
 
 export const store = configureStore({
   reducer: {
     theme: themeSlice,
-    portfolio: portfolioSlice,
+    ui: uiSlice,
   },
 });

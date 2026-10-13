@@ -10,11 +10,15 @@ An optional **Express + Nodemailer** API for the contact form lives in [`backend
 
 ## Highlights
 
-- **Real projects only.** Every project links to its GitHub repository, and every screenshot was captured from the actual app running locally.
-- **Editorial project showcase.** Featured projects with an accessible screenshot carousel (swipe, arrow keys, buttons, dots), a full-screen lightbox, a filterable grid and a live "More on GitHub" list.
+- **Real projects, presented as products.** Adeena Traders (instalment & retail system), KSF Pharmacy System, Feather & Bone (live at featherbonepk.com) and more. Each one is an art-directed panel with a full case study: the challenge, what was built, key numbers, the stack and a screenshot carousel. Source code is not linked.
+- **Scroll storytelling.** Featured projects pin and stack as you scroll. A 3D hero showcase follows the pointer, and gradient progress lines fill with scroll.
+- **Command palette.** Press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd> (or <kbd>/</kbd>) to jump to a section, open a case study, switch theme, copy the email address or download the résumé.
+- **Services that sell.** Eight services (custom software, business websites, web apps & SaaS, custom design, e-commerce, portfolio sites, dashboards, mobile apps), each tied to a project where it shipped, plus what every project includes and a closing call to action.
+- **Certificates.** Course certificates show as cards in the Journey section and open full-size in a viewer.
+- **Shareable case studies.** `?project=ksf-pharmacy` opens a case study directly, and the browser's Back button closes it. `/#contact` and other section links land exactly on the section.
+- **Polish.** A scroll progress bar, a back-to-top button with a progress ring and a circular-reveal theme switch. There is also a live local-time card, count-up stats, a tech marquee and cursor spotlight cards.
 - **Light and dark themes.** Semantic design tokens, OS preference by default, remembered manual choice and no flash on load.
-- **Responsive from 320 px to 4K.** Fluid type with `clamp()`, a centred 1280 px content column and no horizontal scrolling.
-- **Accessible.** Semantic landmarks, skip link, visible focus, 44 px touch targets, reduced-motion support and WCAG AA colour contrast in both themes.
+- **Responsive from 320 px to 4K**, accessible (axe: 0 violations; skip link; focus management in every dialog; 44 px targets; reduced-motion support) and fast. Dialog code loads on demand, offscreen sections skip rendering, and scroll effects use native CSS scroll timelines.
 - **Working contact form.** Uses Netlify Forms, your own API or a pre-filled email. It never shows a fake "sent" message.
 - **SEO.** Canonical URL, Open Graph and Twitter cards, JSON-LD `Person` data, sitemap, robots and a 404 page.
 
@@ -27,16 +31,16 @@ An optional **Express + Nodemailer** API for the contact form lives in [`backend
 ├── backend/                   # Optional Express + Nodemailer contact API
 └── src/
     ├── data/                  # ← All content: profile.js, projects.js, skills.js
-    ├── assets/projects/<id>/  # Project screenshots (<view>-800.webp, <view>-1600.webp)
+    ├── assets/projects/<id>/  # Project images (<view>-800/1600.webp; phones <view>-390/780.webp)
     ├── components/
-    │   ├── layout/            # Header (desktop + mobile nav), Footer
-    │   ├── sections/          # Hero, About, Skills, Projects, Services, Journey, Contact
-    │   ├── projects/          # FeaturedProject, ProjectCard, ProjectGallery, Lightbox, GitHubRepos
-    │   └── ui/                # Logo, ThemeToggle, SectionHeading, Reveal, SocialLinks, …
-    ├── hooks/                 # useThemeSync, useActiveSection
-    ├── lib/                   # images (responsive srcset), contact (form delivery), gallery
-    ├── store/                 # Redux Toolkit: theme + GitHub repositories
-    └── index.css              # Design tokens (light/dark), fonts, component classes
+    │   ├── layout/            # Header, Footer, CommandPalette, ScrollUi (progress bar, back to top)
+    │   ├── sections/          # Hero, Work, Services, About, Skills, Journey, Contact
+    │   ├── projects/          # FeaturedStack, CaseStudy, ProjectCard, ProjectGallery, Lightbox, ProjectVisual
+    │   └── ui/                # Effects (aurora, rotator, count-up, marquee), DeviceFrames, Logo, …
+    ├── hooks/                 # theme, active section, palette shortcut, case-study URL, spotlight
+    ├── lib/                   # images, contact (form delivery), panel colours, platform
+    ├── store/                 # Redux Toolkit: theme + UI (palette, open case study)
+    └── index.css              # Design tokens (light/dark), fonts, effects
 ```
 
 ## Run locally
@@ -59,18 +63,30 @@ All text lives in `src/data/`, so you never need to touch the components.
 | What                                      | Where                     |
 | ----------------------------------------- | ------------------------- |
 | Name, role, contact, socials, availability | `src/data/profile.js`     |
-| Services, process, journey, certifications | `src/data/profile.js`     |
+| Services, process, journey, certificates  | `src/data/profile.js`     |
 | Skills                                    | `src/data/skills.js`      |
 | Projects (featured and grid)              | `src/data/projects.js`    |
 | Résumé PDF                                | `public/resume/saad-bin-saeed-khan-resume.pdf` |
 
 ### Adding a project
 
-1. Capture screenshots at **1280 × 800** (16:10), ideally at 2× density.
-2. Save them as WebP in `src/assets/projects/<project-id>/`, naming each view `<view>-1600.webp` and `<view>-800.webp`.
-3. Add an entry to `projects` in `src/data/projects.js`. Set `featured: true` for an editorial block, and `liveUrl` once it is deployed.
+1. Export images as WebP into `src/assets/projects/<project-id>/`:
+   - Desktop screens or slides go in as `<view>-1600.webp` and `<view>-800.webp`. Pass `{ width, height }` to `screenshot()` if they aren't 16:10 (in `visual.windows`, use `{ view, width, height }`).
+   - Phone screens go in as `<view>-780.webp` and `<view>-390.webp`.
+2. Add an entry to `src/data/projects.js`:
+   - For a stacking panel, set `featured: true`, then give it a `theme` (panel colours) and a `visual` (which screens to frame).
+   - Optional fields are `metrics`, `tagline`, `platforms` and `liveUrl`.
+3. Everything else (case study, command palette entry, footer link) picks the new project up automatically.
 
 A missing image shows a styled "Preview not available" placeholder instead of a broken icon.
+
+### Adding certificates
+
+1. Export the scan as WebP into `src/assets/certificates/` in two widths, e.g. `<id>-800.webp` and `<id>-1600.webp`.
+2. Add it to `certificates` in `src/data/profile.js` with `certificateImage('<id>', [800, 1600], { width, height }, alt, caption)`.
+3. To link it from the timeline, set `certificateId: '<id>'` on a `journey` entry.
+
+Courses without a scan go in `certifications` and are listed under "Also completed".
 
 ## Contact form
 

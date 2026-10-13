@@ -10,6 +10,8 @@ import ProjectImage from './ProjectImage';
  */
 export default function ProjectGallery({ project, onOpen, sizes }) {
   const slides = gallerySlides(project);
+  // Every slide shares the first image's frame; other shapes are letterboxed.
+  const aspect = slides[0] ? slides[0].width / slides[0].height : 1.6;
   const trackRef = useRef(null);
   const [index, setIndex] = useState(0);
   const count = slides.length;
@@ -84,6 +86,7 @@ export default function ProjectGallery({ project, onOpen, sizes }) {
             >
               <ProjectImage
                 image={img}
+                aspect={aspect}
                 title={project.title}
                 sizes={sizes}
                 imgClassName="transition-transform duration-500 ease-out group-hover/slide:scale-[1.015]"

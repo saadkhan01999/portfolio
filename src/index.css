@@ -50,7 +50,8 @@
 /* ─── Design tokens ─────────────────────────────────────────────────────────
    Stored as RGB channels so Tailwind can apply opacity (bg-accent/10).
    Contrast (WCAG 2.2): text tokens ≥ 4.5:1 and control borders ≥ 3:1 on the
-   surfaces they are used on, in both themes. */
+   surfaces they are used on, in both themes. Gradient text only appears at
+   display sizes, where every stop clears 3:1. */
 :root {
   color-scheme: light;
 
@@ -72,18 +73,24 @@
   --c-on-accent: 255 255 255;
   --c-accent-2: 18 184 166;          /* #12B8A6 – decorative only */
   --c-accent-2-text: 11 127 115;     /* #0B7F73 */
+  --c-accent-3: 124 58 237;          /* #7C3AED – violet, gradient partner */
 
   --c-focus-ring: 74 77 224;
   --c-danger: 194 40 58;
   --c-success: 11 127 92;
 
-  --shadow-card: 0 1px 2px rgb(17 24 39 / 0.04), 0 2px 8px rgb(17 24 39 / 0.04);
-  --shadow-lift: 0 2px 4px rgb(17 24 39 / 0.04), 0 18px 40px -12px rgb(17 24 39 / 0.16);
-  --shadow-overlay: 0 24px 80px -16px rgb(17 24 39 / 0.35);
+  --grad-brand: linear-gradient(100deg, rgb(var(--c-accent)) 0%, rgb(var(--c-accent-3)) 55%, rgb(var(--c-accent-2)) 100%);
+  --grad-text: linear-gradient(100deg, #4a4de0 0%, #7c3aed 50%, #0e8c7f 100%);
+  --aurora-strength: 0.32;
 
-  --header-h: 4.5rem;
+  --shadow-card: 0 1px 2px rgb(17 24 39 / 0.04), 0 2px 8px rgb(17 24 39 / 0.04);
+  --shadow-lift: 0 2px 4px rgb(17 24 39 / 0.04), 0 18px 40px -12px rgb(17 24 39 / 0.18);
+  --shadow-overlay: 0 24px 80px -16px rgb(17 24 39 / 0.35);
+  --shadow-glow: 0 10px 40px -10px rgb(var(--c-accent) / 0.55);
+
+  --header-h: 5.25rem;
   --gutter: clamp(1rem, 4vw, 2.5rem);
-  --section-y: clamp(4.5rem, 9vw, 8rem);
+  --section-y: clamp(5rem, 10vw, 9rem);
 }
 
 .dark {
@@ -107,14 +114,19 @@
   --c-on-accent: 11 16 32;           /* dark text on the light accent: 6.6:1 */
   --c-accent-2: 67 214 198;          /* #43D6C6 */
   --c-accent-2-text: 67 214 198;
+  --c-accent-3: 167 139 250;         /* #A78BFA */
 
   --c-focus-ring: 163 165 255;
   --c-danger: 255 138 149;
   --c-success: 74 222 155;
 
+  --grad-text: linear-gradient(100deg, #a3a5ff 0%, #c4b5fd 50%, #5eead4 100%);
+  --aurora-strength: 0.45;
+
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.3), 0 18px 40px -12px rgb(0 0 0 / 0.55);
   --shadow-overlay: 0 24px 80px -16px rgb(0 0 0 / 0.7);
+  --shadow-glow: 0 10px 40px -10px rgb(var(--c-accent) / 0.6);
 }
 
 /* ─── Base ──────────────────────────────────────────────────────────────── */
@@ -122,7 +134,7 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    /* Anchor targets land just below the sticky header. */
+    /* Anchor targets land just below the floating header. */
     scroll-padding-top: var(--header-h);
   }
 
@@ -153,7 +165,7 @@
   }
 
   ::selection {
-    background: rgb(var(--c-accent) / 0.22);
+    background: rgb(var(--c-accent) / 0.25);
   }
 
   /* One visible, high-contrast focus treatment for every interactive element. */
@@ -182,6 +194,13 @@ html.theme-transition *::after {
   transition: background-color 240ms ease, border-color 240ms ease, color 240ms ease, fill 240ms ease !important;
 }
 
+/* View-transition theme switch: the new theme grows as a circle from the toggle. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /* ─── Components ────────────────────────────────────────────────────────── */
 @layer components {
   .container-page {
@@ -194,32 +213,66 @@ html.theme-transition *::after {
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 font-mono text-meta font-medium uppercase tracking-[0.14em] text-accent-fg;
+    @apply inline-flex items-center gap-2.5 font-mono text-meta font-medium uppercase tracking-[0.16em] text-accent-fg;
   }
 
   .card {
     @apply rounded-card border border-line bg-surface shadow-card;
   }
 
+  .glass {
+    @apply border border-line/80 bg-surface/70 backdrop-blur-xl;
+  }
+
+  .text-gradient {
+    background-image: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
   /* Buttons — 44px minimum touch target. */
   .btn {
-    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-control px-5 font-sans text-[0.9375rem] font-semibold leading-none no-underline transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out;
+    @apply relative inline-flex min-h-[2.75rem] items-center justify-center gap-2 overflow-hidden rounded-full px-5 font-sans text-[0.9375rem] font-semibold leading-none no-underline transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out;
   }
   .btn:active {
-    transform: translateY(1px);
+    transform: translateY(1px) scale(0.99);
   }
   .btn-primary {
-    @apply btn bg-accent text-accent-contrast shadow-card hover:bg-accent/90 hover:shadow-lift;
+    @apply btn text-accent-contrast hover:-translate-y-0.5;
+    background-image: linear-gradient(100deg, rgb(var(--c-accent)), rgb(var(--c-accent-3)));
+    box-shadow: var(--shadow-glow);
+  }
+  /* A soft highlight sweeps across primary buttons on hover. */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+  }
+  .btn-primary:hover::after {
+    transform: translateX(120%);
   }
   .btn-secondary {
-    @apply btn border border-line-strong/60 bg-surface text-fg hover:border-fg/40 hover:bg-surface-elevated;
+    @apply btn border border-line-strong/50 bg-surface/80 text-fg backdrop-blur hover:-translate-y-0.5 hover:border-fg/40 hover:bg-surface;
   }
   .btn-ghost {
     @apply btn px-3 text-fg-secondary hover:bg-accent-subtle hover:text-fg;
   }
+  /* Buttons placed on the always-dark project panels. */
+  .btn-on-dark {
+    @apply btn border border-white/25 bg-white/10 text-white backdrop-blur hover:-translate-y-0.5 hover:bg-white/20;
+  }
+  .btn-light {
+    @apply btn bg-white text-[#0B1020] hover:-translate-y-0.5 hover:bg-white/90;
+  }
 
   .icon-btn {
-    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-control border border-line bg-surface text-fg-secondary transition-colors duration-200 hover:border-line-strong/60 hover:text-fg;
+    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface/80 text-fg-secondary transition-colors duration-200 hover:border-line-strong/60 hover:text-fg;
   }
 
   .link {
@@ -228,6 +281,10 @@ html.theme-transition *::after {
 
   .chip {
     @apply inline-flex items-center rounded-full border border-line bg-surface px-2.5 py-1 font-mono text-[0.75rem] font-medium leading-none text-fg-secondary;
+  }
+
+  .kbd {
+    @apply inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded border border-line bg-surface-sunken px-1 font-mono text-[0.6875rem] font-medium text-fg-secondary;
   }
 
   .field-label {
@@ -250,6 +307,202 @@ html.theme-transition *::after {
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Cursor-following glow on cards; --mx/--my are set by useSpotlight. */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(28rem circle at var(--mx, 50%) var(--my, 50%), rgb(var(--c-accent) / 0.12), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .spotlight::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(18rem circle at var(--mx, 50%) var(--my, 50%), rgb(var(--c-accent) / 0.75), rgb(var(--c-accent-2) / 0.35) 40%, transparent 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .spotlight:hover::before,
+  .spotlight:hover::after,
+  .spotlight:focus-within::after {
+    opacity: 1;
+  }
+}
+
+/* ─── Ambient effects ──────────────────────────────────────────────────── */
+
+/* Drifting colour fields, drawn with gradients (no blur filters) to stay cheap. */
+.aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora > span {
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 9999px;
+  opacity: var(--aurora-strength);
+  will-change: transform;
+  animation: aurora-drift 22s ease-in-out infinite alternate;
+}
+.aurora > span:nth-child(1) {
+  top: -30vmax;
+  left: -12vmax;
+  background: radial-gradient(closest-side, rgb(var(--c-accent)), transparent);
+}
+.aurora > span:nth-child(2) {
+  top: -24vmax;
+  right: -18vmax;
+  background: radial-gradient(closest-side, rgb(var(--c-accent-3)), transparent);
+  animation-duration: 26s;
+  animation-delay: -6s;
+}
+.aurora > span:nth-child(3) {
+  bottom: -38vmax;
+  left: 20vmax;
+  background: radial-gradient(closest-side, rgb(var(--c-accent-2)), transparent);
+  animation-duration: 30s;
+  animation-delay: -12s;
+}
+@keyframes aurora-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6vmax, 4vmax, 0) scale(1.08); }
+  100% { transform: translate3d(-4vmax, 6vmax, 0) scale(0.95); }
+}
+
+.grid-lines {
+  background-image: linear-gradient(rgb(var(--c-border) / 0.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--c-border) / 0.9) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 0%, #000, transparent);
+  mask-image: radial-gradient(70% 60% at 50% 0%, #000, transparent);
+}
+
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Infinite ticker; the list is rendered twice so -50% loops seamlessly. */
+.marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.float-slow {
+  animation: float-y 7s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+/* Scroll-linked fills (progress bar, process and journey lines) use native
+   scroll-driven animations. Browsers without support show the progress bar via
+   JS (ScrollUi.jsx) and the lines fully drawn. */
+.scroll-fill-x,
+.scroll-fill-y {
+  background-image: var(--grad-brand);
+}
+.scroll-fill-y {
+  background-image: linear-gradient(rgb(var(--c-accent)), rgb(var(--c-accent-3)), rgb(var(--c-accent-2)));
+}
+@supports (animation-timeline: view()) {
+  .scroll-fill-x {
+    transform-origin: left;
+    animation: fill-x linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 55%;
+  }
+  .scroll-fill-y {
+    transform-origin: top;
+    animation: fill-y linear both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 60%;
+  }
+  .page-progress {
+    transform-origin: left;
+    animation: fill-x linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+@keyframes fill-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes fill-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* Below-the-fold sections skip rendering work until they approach the viewport.
+   `auto` remembers each section's real height once it has been rendered. */
+.defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
+}
+/* Set before in-page navigation (see lib/renderAll.js) so targets have real positions. */
+.render-all .defer-render {
+  content-visibility: visible;
+}
+
+/* Hero showcase: tilted 3D stack that follows the pointer (desktop only). */
+.showcase-layer {
+  transform: translateZ(var(--z, 0px));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.showcase-layer:hover,
+.showcase-layer:focus-visible {
+  transform: translateZ(var(--z, 0px)) translateY(-10px);
+}
+@media (min-width: 1024px) {
+  .showcase-3d {
+    transform: rotateX(calc(6deg + var(--ry, 0deg))) rotateY(calc(-12deg + var(--rx, 0deg)));
   }
 }
 
