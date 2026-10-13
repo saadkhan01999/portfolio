@@ -1,81 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import { LazyMotion, MotionConfig } from 'framer-motion';
 import { Provider } from 'react-redux';
+import Footer from './components/layout/Footer';
+import Header from './components/layout/Header';
+import About from './components/sections/About';
+import Contact from './components/sections/Contact';
+import Hero from './components/sections/Hero';
+import Journey from './components/sections/Journey';
+import Projects from './components/sections/Projects';
+import Services from './components/sections/Services';
+import Skills from './components/sections/Skills';
+import { useThemeSync } from './hooks/useThemeSync';
 import { store } from './store/store';
-import { useAppDispatch } from './hooks/useAppDispatch';
-import { initializeTheme } from './store/slices/themeSlice';
 
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+const loadMotionFeatures = () => import('./lib/motionFeatures').then((mod) => mod.default);
 
-// ─── Scroll Progress Bar ────────────────────────────────────────────────────
-const ScrollProgress = () => {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = document.documentElement;
-      const scrolled = el.scrollTop;
-      const total = el.scrollHeight - el.clientHeight;
-      setProgress(total > 0 ? (scrolled / total) * 100 : 0);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+function AppContent() {
+  useThemeSync();
 
   return (
-    <div
-      className="scroll-progress"
-      style={{ width: `${progress}%` }}
-      role="progressbar"
-      aria-valuenow={Math.round(progress)}
-      aria-valuemin={0}
-      aria-valuemax={100}
-    />
-  );
-};
-
-// ─── App Content ────────────────────────────────────────────────────────────
-const AppContent = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(initializeTheme());
-  }, [dispatch]);
-
-  return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
-        transition: 'background 0.4s ease, color 0.4s ease',
-      }}
-    >
-      <ScrollProgress />
-      <Navbar />
-      <main>
+    <>
+      <a href="#main" className="skip-link btn-primary">
+        Skip to content
+      </a>
+      <Header />
+      <main id="main" tabIndex={-1} className="focus:outline-none">
         <Hero />
         <About />
         <Skills />
         <Projects />
-        <Testimonials />
+        <Services />
+        <Journey />
         <Contact />
       </main>
       <Footer />
-    </div>
+    </>
   );
-};
+}
 
 export default function App() {
   return (
     <Provider store={store}>
-      <AppContent />
+      {/* Animation features load after first render; reducedMotion="user" honours the OS setting. */}
+      <LazyMotion features={loadMotionFeatures} strict>
+        <MotionConfig reducedMotion="user">
+          <AppContent />
+        </MotionConfig>
+      </LazyMotion>
     </Provider>
   );
 }

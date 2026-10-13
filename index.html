@@ -1,26 +1,96 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
   <head>
-    <meta charset="UTF-8"/>
-    <link rel="icon" type="image/png" href="/src/assets/hlogo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Saad Bin Saeed Khan — Full Stack MERN Developer crafting scalable systems & exceptional web experiences." />
-    <meta name="keywords" content="Full Stack Developer, MERN, React, Node.js, MongoDB, Express, Web Developer Pakistan" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>Saad Bin Saeed Khan — Full Stack Developer (MERN)</title>
+    <meta
+      name="description"
+      content="Saad Bin Saeed Khan is a full-stack MERN developer in Pakistan building responsive web apps with React, Node.js, Express and MongoDB. See real projects and get in touch."
+    />
     <meta name="author" content="Saad Bin Saeed Khan" />
+    <link rel="canonical" href="https://ssamportfolio.netlify.app/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#F7F8FC" />
+    <meta name="color-scheme" content="light dark" />
 
-    <!-- Open Graph -->
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Saad Bin Saeed Khan — Full Stack Developer" />
-    <meta property="og:description" content="Building scalable systems & modern UI experiences. MERN Stack Developer." />
+    <meta property="og:site_name" content="Saad Bin Saeed Khan" />
+    <meta property="og:url" content="https://ssamportfolio.netlify.app/" />
+    <meta property="og:title" content="Saad Bin Saeed Khan — Full Stack Developer (MERN)" />
+    <meta
+      property="og:description"
+      content="Full-stack web apps with React, Node.js, Express and MongoDB — from storefronts and dashboards to real-time apps."
+    />
+    <meta property="og:image" content="https://ssamportfolio.netlify.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Saad Bin Saeed Khan — Full Stack Developer portfolio" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Saad Bin Saeed Khan — Full Stack Developer (MERN)" />
+    <meta
+      name="twitter:description"
+      content="Full-stack web apps with React, Node.js, Express and MongoDB — from storefronts and dashboards to real-time apps."
+    />
+    <meta name="twitter:image" content="https://ssamportfolio.netlify.app/og-image.jpg" />
 
-    <title>Saad Bin Saeed Khan — Full Stack Developer</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Saad Bin Saeed Khan",
+        "jobTitle": "Full Stack Developer",
+        "url": "https://ssamportfolio.netlify.app/",
+        "image": "https://ssamportfolio.netlify.app/og-image.jpg",
+        "email": "mailto:saadkhan01999@gmail.com",
+        "address": { "@type": "PostalAddress", "addressCountry": "PK" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Abdul Wali Khan University" },
+        "knowsAbout": ["React", "Node.js", "Express", "MongoDB", "React Native", "Tailwind CSS", "REST APIs"],
+        "sameAs": ["https://github.com/saadkhan01999", "https://www.linkedin.com/in/saadkhan01/"]
+      }
+    </script>
 
-    <!-- Google Fonts: Syne (headings) + DM Sans (body) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Apply the saved or system theme before first paint (no flash). Keep in sync with src/store/slices/themeSlice.js. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', dark);
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#0B1020' : '#F7F8FC');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
+    <noscript>
+      <p style="padding: 1rem; font-family: system-ui, sans-serif">
+        This portfolio needs JavaScript. You can still reach Saad at
+        <a href="mailto:saadkhan01999@gmail.com">saadkhan01999@gmail.com</a> or on
+        <a href="https://github.com/saadkhan01999">GitHub</a>.
+      </p>
+    </noscript>
+
+    <!--
+      Static copy of the contact form so Netlify's build bot can register it
+      (the visible form is rendered by React). Field names must match src/lib/contact.js.
+    -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="project-type" />
+      <input type="text" name="subject" />
+      <textarea name="message"></textarea>
+      <input type="text" name="bot-field" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

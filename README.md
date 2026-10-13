@@ -1,167 +1,115 @@
-# 🚀 Saad Bin Saeed Khan — Portfolio v2.0
+# Saad Bin Saeed Khan — Portfolio
 
-A production-grade full-stack portfolio built with **React 18**, **Redux Toolkit**, **Framer Motion**, **Tailwind CSS**, and an **Express.js + Nodemailer** backend for the contact form.
+Personal portfolio of **Saad Bin Saeed Khan**, Full Stack Developer (MERN).
+Live: <https://ssamportfolio.netlify.app/>
 
----
-
-## ✨ Features
-
-- 🌗 **Dark / Light mode** with system preference detection & localStorage persistence
-- 🎬 **Smooth animations** via Framer Motion (staggered reveals, scroll-triggered, hover states)
-- ⌨️ **Typewriter effect** on hero section cycling through roles
-- 📊 **Animated stat counters** that trigger on scroll into view
-- 🖼️ **Profile image** with spinning gradient ring
-- 📡 **Live GitHub repos** fetched from the GitHub API with shimmer loading skeletons
-- 🏆 **Featured projects** section (hand-curated above GitHub repos)
-- 🎠 **Auto-scrolling testimonials carousel** with pause on hover
-- 📬 **Real contact form** with full validation, rate-limiting, auto-reply email, and professional HTML email template
-- 📈 **Scroll progress bar** at top of page
-- 📱 **Fully responsive** — mobile, tablet, desktop
-- 🎨 **CSS design tokens** (`--bg-primary`, `--accent`, etc.) for seamless dark/light theming
+Built with **React 18**, **Vite**, **Tailwind CSS**, **Redux Toolkit** and **Framer Motion**, deployed on **Netlify**.
+An optional **Express + Nodemailer** API for the contact form lives in [`backend/`](backend/).
 
 ---
 
-## 🗂 Project Structure
+## Highlights
+
+- **Real projects only.** Every project links to its GitHub repository, and every screenshot was captured from the actual app running locally.
+- **Editorial project showcase.** Featured projects with an accessible screenshot carousel (swipe, arrow keys, buttons, dots), a full-screen lightbox, a filterable grid and a live "More on GitHub" list.
+- **Light and dark themes.** Semantic design tokens, OS preference by default, remembered manual choice and no flash on load.
+- **Responsive from 320 px to 4K.** Fluid type with `clamp()`, a centred 1280 px content column and no horizontal scrolling.
+- **Accessible.** Semantic landmarks, skip link, visible focus, 44 px touch targets, reduced-motion support and WCAG AA colour contrast in both themes.
+- **Working contact form.** Uses Netlify Forms, your own API or a pre-filled email. It never shows a fake "sent" message.
+- **SEO.** Canonical URL, Open Graph and Twitter cards, JSON-LD `Person` data, sitemap, robots and a 404 page.
+
+## Project structure
 
 ```
-portfolio-pro/
-├── src/
-│   ├── assets/           # Images, PDF resume, logo
-│   ├── components/
-│   │   ├── Navbar.jsx    # Fixed nav with active section tracking
-│   │   ├── Hero.jsx      # Typewriter, profile ring, floating badges
-│   │   ├── About.jsx     # Animated counters, timeline, tech stack
-│   │   ├── Skills.jsx    # Animated progress bars by category
-│   │   ├── Projects.jsx  # Featured cards + live GitHub repos
-│   │   ├── Testimonials.jsx  # Infinite auto-scroll carousel
-│   │   ├── Contact.jsx   # Full-stack form → Express backend
-│   │   └── Footer.jsx    # Multi-column with back-to-top
-│   ├── hooks/
-│   │   ├── useTypewriter.js
-│   │   └── useAppDispatch.js
-│   ├── store/
-│   │   ├── store.js
-│   │   └── slices/
-│   │       ├── themeSlice.js
-│   │       └── portfolioSlice.js
-│   ├── App.jsx           # Root with scroll progress bar
-│   ├── index.css         # Design tokens, glass effects, animations
-│   └── main.jsx
-├── backend/              # Express.js contact API
-│   ├── server.js
-│   ├── package.json
-│   └── .env.example
-├── index.html
-├── tailwind.config.js
-├── vite.config.ts
-└── package.json
+├── index.html                 # Meta/SEO, no-flash theme script, Netlify form stub
+├── netlify.toml               # Build, cache and security headers, old résumé redirect
+├── public/                    # Favicons, og-image.jpg, résumé PDF, robots, sitemap, 404
+├── backend/                   # Optional Express + Nodemailer contact API
+└── src/
+    ├── data/                  # ← All content: profile.js, projects.js, skills.js
+    ├── assets/projects/<id>/  # Project screenshots (<view>-800.webp, <view>-1600.webp)
+    ├── components/
+    │   ├── layout/            # Header (desktop + mobile nav), Footer
+    │   ├── sections/          # Hero, About, Skills, Projects, Services, Journey, Contact
+    │   ├── projects/          # FeaturedProject, ProjectCard, ProjectGallery, Lightbox, GitHubRepos
+    │   └── ui/                # Logo, ThemeToggle, SectionHeading, Reveal, SocialLinks, …
+    ├── hooks/                 # useThemeSync, useActiveSection
+    ├── lib/                   # images (responsive srcset), contact (form delivery), gallery
+    ├── store/                 # Redux Toolkit: theme + GitHub repositories
+    └── index.css              # Design tokens (light/dark), fonts, component classes
 ```
 
----
+## Run locally
 
-## ⚡ Frontend Setup
+Requires Node.js 18 or newer (Netlify builds with Node 20).
 
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Create env file
-cp .env.example .env
-# Set VITE_BACKEND_URL=http://localhost:5000 (or your deployed backend URL)
-
-# 3. Run dev server
-npm run dev
-# → http://localhost:5173
+npm run dev        # http://localhost:5173
+npm run lint       # ESLint (React, hooks)
+npm run build      # production build → dist/
+npm run preview    # serve the production build locally
+npm run check      # lint + build
 ```
 
----
+## Editing content
 
-## 📬 Backend Setup (Contact Form)
+All text lives in `src/data/`, so you never need to touch the components.
+
+| What                                      | Where                     |
+| ----------------------------------------- | ------------------------- |
+| Name, role, contact, socials, availability | `src/data/profile.js`     |
+| Services, process, journey, certifications | `src/data/profile.js`     |
+| Skills                                    | `src/data/skills.js`      |
+| Projects (featured and grid)              | `src/data/projects.js`    |
+| Résumé PDF                                | `public/resume/saad-bin-saeed-khan-resume.pdf` |
+
+### Adding a project
+
+1. Capture screenshots at **1280 × 800** (16:10), ideally at 2× density.
+2. Save them as WebP in `src/assets/projects/<project-id>/`, naming each view `<view>-1600.webp` and `<view>-800.webp`.
+3. Add an entry to `projects` in `src/data/projects.js`. Set `featured: true` for an editorial block, and `liveUrl` once it is deployed.
+
+A missing image shows a styled "Preview not available" placeholder instead of a broken icon.
+
+## Contact form
+
+The delivery method is chosen at build time (`src/lib/contact.js`):
+
+| Mode | When | What happens |
+| --- | --- | --- |
+| **Netlify Forms** | Built on Netlify and `VITE_BACKEND_URL` is empty (the default) | Submissions appear in Netlify, under Site → Forms |
+| **Express API** | `VITE_BACKEND_URL` is set | POSTs to `backend/` (Nodemailer + Gmail), which also sends an auto-reply |
+| **Email app** | Anywhere else (e.g. `npm run dev`) | Opens the visitor's email app with the message pre-filled |
+
+If sending fails, the visitor sees the reason and a one-click "send it by email instead" link that keeps their message.
+
+**One-time Netlify setup:**
+
+1. Open Site configuration → Forms and click **Enable form detection**, then redeploy.
+2. Under Forms → Form notifications, add an email notification to `saadkhan01999@gmail.com`.
+
+Spam protection uses the Netlify honeypot field (`bot-field`). You can turn on reCAPTCHA in Netlify if spam becomes an issue.
+
+**Optional: Express backend.** This is only needed if you prefer Gmail delivery with auto-replies.
 
 ```bash
-# 1. Navigate to backend folder
 cd backend
-
-# 2. Install dependencies
 npm install
-
-# 3. Create env file
-cp .env.example .env
+cp .env.example .env   # set GMAIL_USER and a Gmail App Password in GMAIL_PASS
+npm run dev            # http://localhost:5000
 ```
 
-### Fill in `.env`:
+Then set `VITE_BACKEND_URL` (see `.env.example`) in Netlify → Site configuration → Environment variables to the deployed backend URL, and redeploy.
 
-```env
-GMAIL_USER=saadkhan01999@gmail.com
-GMAIL_PASS=your_16_char_app_password   # See below
-PORT=5000
-FRONTEND_URL=http://localhost:5173
-```
+## Deploy to Netlify
 
-### Getting Gmail App Password (required):
-1. Go to **myaccount.google.com**
-2. **Security** → **2-Step Verification** (enable if not already)
-3. Search for **"App passwords"**
-4. Create one for **Mail** → **Other** → Name it "Portfolio"
-5. Copy the 16-character password into `GMAIL_PASS`
+`netlify.toml` already sets everything up:
 
-```bash
-# 4. Start the backend
-npm run dev
-# → http://localhost:5000
-```
+- Build command `npm run build`, publish directory `dist`, Node 20
+- Long-term caching for fingerprinted assets, plus security headers
+- A 301 redirect from the old résumé path (`/src/assets/latest.pdf`) to the new one
 
-Test it:
-```bash
-curl -X POST http://localhost:5000/api/contact \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test","email":"test@test.com","subject":"Hello","message":"This is a test message from the portfolio."}'
-```
+To deploy, connect the GitHub repository in Netlify (*Add new site → Import an existing project*). Every push to `main` then deploys automatically.
 
----
-
-## 🌐 Deployment
-
-### Frontend → Vercel
-```bash
-npm run build
-# Upload `dist/` to Vercel
-# Add env var: VITE_BACKEND_URL=https://your-backend.railway.app
-```
-
-### Backend → Railway (free)
-1. Push `backend/` folder to GitHub
-2. Create new Railway project → Deploy from GitHub
-3. Add environment variables (GMAIL_USER, GMAIL_PASS, FRONTEND_URL, PORT)
-4. Railway gives you a URL like `https://portfolio-backend-xyz.railway.app`
-
----
-
-## 🔧 Customization Checklist
-
-- [ ] Replace `src/assets/img.jpeg` with your real photo
-- [ ] Replace `src/assets/hlogo.png` with your logo
-- [ ] Replace `src/assets/latest.pdf` with your updated resume
-- [ ] Update `portfolioSlice.js` → featured projects with real project details
-- [ ] Update GitHub username in `portfolioSlice.js` → `fetchGitHubRepos`
-- [ ] Fill in `backend/.env` with your Gmail App Password
-- [ ] Update `VITE_BACKEND_URL` in frontend `.env` for production
-
----
-
-## 📦 Tech Stack
-
-| Layer       | Technology                            |
-|-------------|---------------------------------------|
-| Frontend    | React 18, Vite, Tailwind CSS          |
-| State       | Redux Toolkit                         |
-| Animations  | Framer Motion                         |
-| Icons       | Lucide React                          |
-| Fonts       | Syne (headings), DM Sans (body), JetBrains Mono |
-| Backend     | Express.js, Nodemailer, CORS          |
-| Rate Limit  | express-rate-limit (5 msgs/hour/IP)   |
-| Deployment  | Vercel (frontend) + Railway (backend) |
-
----
-
-**Built with ❤️ by Saad Bin Saeed Khan**
+**If the domain changes,** update the URL in `index.html` (canonical, Open Graph, JSON-LD), `public/sitemap.xml`, and `public/robots.txt`.

@@ -1,0 +1,29 @@
+# Netlify deployment for the portfolio (static Vite build).
+# The contact form uses Netlify Forms automatically when built here — see README.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# The previous site linked its résumé at this (broken) path; keep old links working.
+[[redirects]]
+  from = "/src/assets/latest.pdf"
+  to = "/resume/saad-bin-saeed-khan-resume.pdf"
+  status = 301
+
+# Fingerprinted build output never changes, so it can be cached for a year.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .ring { fill: #FFFFFF; stroke: #38B6F7; }
+    .mark { fill: #0B4FA8; }
+    @media (prefers-color-scheme: dark) {
+      .ring { fill: #0B1020; stroke: #43D6C6; }
+      .mark { fill: #F4F7FF; }
+    }
+  </style>
+  <circle class="ring" cx="32" cy="32" r="29" stroke-width="4"/>
+  <text class="mark" x="32" y="38.5" text-anchor="middle" font-family="Manrope, Arial, Helvetica, sans-serif" font-size="17" font-weight="800" letter-spacing="0.5">SSAM</text>
+</svg>

@@ -1,59 +1,82 @@
 /** @type {import('tailwindcss').Config} */
+
+// Every colour is a semantic token defined in src/index.css (light values on
+// :root, dark values on .dark). Components never use raw hex values, so a
+// theme change is a token change.
+const token = (name) => `rgb(var(--c-${name}) / <alpha-value>)`;
+
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'class',
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      white: '#FFFFFF',
+      black: '#000000',
+      bg: token('bg'),
+      surface: {
+        DEFAULT: token('surface'),
+        elevated: token('surface-elevated'),
+        sunken: token('surface-sunken'),
+      },
+      fg: {
+        DEFAULT: token('text-primary'),
+        secondary: token('text-secondary'),
+        muted: token('text-muted'),
+      },
+      line: {
+        DEFAULT: token('border'),
+        strong: token('border-strong'),
+      },
+      accent: {
+        DEFAULT: token('accent'),
+        fg: token('accent-text'),
+        subtle: token('accent-subtle'),
+        contrast: token('on-accent'),
+      },
+      teal: {
+        DEFAULT: token('accent-2'),
+        fg: token('accent-2-text'),
+      },
+      focus: token('focus-ring'),
+      danger: token('danger'),
+      success: token('success'),
+    },
+    fontFamily: {
+      display: ['"Manrope Variable"', 'Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      sans: ['"Inter Variable"', 'Inter', 'ui-sans-serif', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+      mono: ['"JetBrains Mono Variable"', '"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+    },
     extend: {
-      fontFamily: {
-        display: ['Syne', 'system-ui', 'sans-serif'],
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+      fontSize: {
+        display: ['clamp(2.35rem, 6vw, 5.75rem)', { lineHeight: '1', letterSpacing: '-0.04em' }],
+        h2: ['clamp(1.8rem, 4vw, 3.25rem)', { lineHeight: '1.08', letterSpacing: '-0.03em' }],
+        h3: ['clamp(1.15rem, 2vw, 1.5rem)', { lineHeight: '1.25', letterSpacing: '-0.015em' }],
+        lead: ['clamp(1rem, 1.4vw, 1.2rem)', { lineHeight: '1.65' }],
+        body: ['1.0625rem', { lineHeight: '1.7' }],
+        caption: ['0.875rem', { lineHeight: '1.55' }],
+        meta: ['0.78125rem', { lineHeight: '1.4', letterSpacing: '0.02em' }],
       },
-      colors: {
-        accent: {
-          DEFAULT: '#4F7BF7',
-          light: '#7EA7FF',
-          dark: '#3563E9',
-          glow: 'rgba(79,123,247,0.2)',
-        },
+      maxWidth: {
+        container: '80rem',
+        prose: '38rem',
       },
-      animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'pulse-ring': 'pulse-ring 2s ease-in-out infinite',
-        'shimmer': 'shimmer 2.5s linear infinite',
-        'slide-up': 'slideUp 0.6s ease-out',
-        'fade-in': 'fadeIn 0.8s ease-out',
-        'gradient-x': 'gradientX 4s ease infinite',
-        'spin-slow': 'spin 8s linear infinite',
+      borderRadius: {
+        card: '1.25rem',
+        control: '0.75rem',
       },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-16px)' },
-        },
-        'pulse-ring': {
-          '0%, 100%': { boxShadow: '0 0 0 0 rgba(79,123,247,0.4)' },
-          '50%': { boxShadow: '0 0 0 20px rgba(79,123,247,0)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-1000px 0' },
-          '100%': { backgroundPosition: '1000px 0' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(30px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        gradientX: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
+      boxShadow: {
+        card: 'var(--shadow-card)',
+        lift: 'var(--shadow-lift)',
+        overlay: 'var(--shadow-overlay)',
       },
-      backdropBlur: {
-        xs: '2px',
+      transitionTimingFunction: {
+        out: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      },
+      screens: {
+        xs: '420px',
+        '3xl': '1920px',
       },
     },
   },
