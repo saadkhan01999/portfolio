@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react';
  * provides the modal focus trap, inert background and Escape-to-close.
  * `state` is { images, index, title } or null.
  */
-export default function Lightbox({ state, onClose, onNavigate }) {
+export default function Lightbox({ state, onClose, onNavigate, lockScroll = true }) {
   const dialogRef = useRef(null);
   const returnFocusRef = useRef(null);
   const pointerStart = useRef(null);
@@ -18,15 +18,16 @@ export default function Lightbox({ state, onClose, onNavigate }) {
     if (open && !dialog.open) {
       returnFocusRef.current = document.activeElement;
       dialog.showModal();
-      document.documentElement.style.overflow = 'hidden';
+      if (lockScroll) document.documentElement.style.overflow = 'hidden';
+      dialog.querySelector('[data-autofocus]')?.focus();
     } else if (!open && dialog.open) {
       dialog.close();
     }
     return undefined;
-  }, [open]);
+  }, [open, lockScroll]);
 
   const handleClose = () => {
-    document.documentElement.style.overflow = '';
+    if (lockScroll) document.documentElement.style.overflow = '';
     onClose();
     returnFocusRef.current?.focus?.();
   };
@@ -70,7 +71,7 @@ export default function Lightbox({ state, onClose, onNavigate }) {
             </h2>
             <button
               type="button"
-              autoFocus
+              data-autofocus
               onClick={() => dialogRef.current?.close()}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-white"
               aria-label="Close screenshot viewer"

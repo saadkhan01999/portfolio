@@ -6,14 +6,14 @@ export const skillGroups = [
     icon: 'layout',
     title: 'Front-end',
     summary: 'Responsive, accessible interfaces and component architecture.',
-    skills: ['HTML5', 'CSS3', 'JavaScript (ES6+)', 'React', 'Redux Toolkit', 'Next.js', 'Tailwind CSS', 'Bootstrap', 'Framer Motion', 'Vite'],
+    skills: ['HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript', 'React', 'Redux Toolkit', 'TanStack Query', 'Next.js', 'Tailwind CSS', 'Bootstrap', 'Framer Motion', 'Vite'],
   },
   {
     id: 'backend',
     icon: 'server',
     title: 'Back-end',
     summary: 'APIs, authentication and real-time features on Node.js.',
-    skills: ['Node.js', 'Express.js', 'REST API design', 'Socket.io', 'JWT authentication', 'Role-based access'],
+    skills: ['Node.js', 'Express.js', 'REST API design', 'Socket.io', 'JWT authentication', 'Role-based access', 'Multi-tenant SaaS'],
   },
   {
     id: 'database',
@@ -46,4 +46,9 @@ export const skillGroups = [
 ];
 
 // Short list shown in the hero.
-export const coreStack = ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'React Native'];
+export const coreStack = ['React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'React Native'];
+
+// Scrolling ticker of everyday tools.
+export const marquee = ['React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Redux Toolkit', 'Socket.io', 'React Native', 'Next.js', 'Vite', 'REST APIs', 'JWT', 'Framer Motion', 'Git & GitHub'];
+
+export const skillCount = skillGroups.reduce((n, g) => n + g.skills.length, 0);
