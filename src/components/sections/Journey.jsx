@@ -104,6 +104,7 @@ export default function Journey() {
                     <button
                       type="button"
                       onClick={() => openCertificate(c.id)}
+                      data-cursor="View certificate"
                       className="group relative block w-full overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lift"
                     >
                       <img

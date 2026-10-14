@@ -81,6 +81,7 @@ export default function ProjectGallery({ project, onOpen, sizes }) {
               type="button"
               tabIndex={i === index ? 0 : -1}
               onClick={() => onOpen(slides, i, project.title)}
+              data-cursor="Zoom in"
               className="group/slide relative block w-full cursor-zoom-in focus-visible:outline-offset-[-3px]"
               aria-label={`View larger: ${img.caption}`}
             >

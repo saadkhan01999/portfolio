@@ -47,19 +47,20 @@ function Showcase() {
 
   const open = (id) => () => dispatch(openCaseStudy(id));
   const layer = 'showcase-layer absolute block rounded-xl hover:z-20 focus-visible:z-20';
+  const cursor = 'Open case study';
 
   return (
     <div ref={ref} onPointerMove={onMove} onPointerLeave={reset} className="relative [perspective:1800px]">
       <div
         className="showcase-3d relative mx-auto aspect-[10/9] w-full max-w-[40rem] transition-transform duration-500 ease-out [transform-style:preserve-3d]"
       >
-        <button type="button" onClick={open('ksf-pharmacy')} aria-label="Open the KSF Pharmacy System case study" className={`${layer} right-0 top-[4%] w-[80%]`} style={{ '--z': '-40px' }}>
+        <button type="button" onClick={open('ksf-pharmacy')} aria-label="Open the KSF Pharmacy System case study" data-cursor={cursor} className={`${layer} right-0 top-[4%] w-[80%]`} style={{ '--z': '-40px' }}>
           <BrowserFrame image={ksf.windows[0]} label="KSF Pharmacy System" sizes="(min-width: 1024px) 520px, 80vw" />
         </button>
-        <button type="button" onClick={open('feather-bone')} aria-label="Open the Feather & Bone case study (featherbonepk.com)" className={`${layer} bottom-[6%] left-0 w-[72%]`} style={{ '--z': '30px' }}>
+        <button type="button" onClick={open('feather-bone')} aria-label="Open the Feather & Bone case study (featherbonepk.com)" data-cursor={cursor} className={`${layer} bottom-[6%] left-0 w-[72%]`} style={{ '--z': '30px' }}>
           <BrowserFrame image={fb.windows[0]} label="featherbonepk.com" dark sizes="(min-width: 1024px) 460px, 72vw" />
         </button>
-        <button type="button" onClick={open('adeena-traders')} aria-label="Open the Adeena Traders case study" className={`${layer} bottom-0 right-[3%] w-[25%] rounded-[2rem]`} style={{ '--z': '90px' }}>
+        <button type="button" onClick={open('adeena-traders')} aria-label="Open the Adeena Traders case study" data-cursor={cursor} className={`${layer} bottom-0 right-[3%] w-[25%] rounded-[2rem]`} style={{ '--z': '90px' }}>
           <PhoneFrame image={adeena.phones[0]} className="float-slow" />
         </button>
 
@@ -111,11 +112,11 @@ export default function Hero() {
           </m.p>
 
           <m.div {...fadeUp(0.16)} className="mt-9 flex flex-col gap-3 xs:flex-row xs:flex-wrap xs:items-center">
-            <a href="#work" className="btn-primary group h-12 px-6">
+            <a href="#work" data-magnetic className="btn-primary group h-12 px-6">
               Explore my work
               <ArrowRight size={18} aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1" />
             </a>
-            <a href="#contact" className="btn-secondary h-12 px-6">
+            <a href="#contact" data-magnetic className="btn-secondary h-12 px-6">
               <Sparkles size={17} aria-hidden="true" />
               Start a project
             </a>
