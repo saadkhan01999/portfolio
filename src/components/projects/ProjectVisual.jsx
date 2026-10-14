@@ -1,3 +1,4 @@
+import { m } from 'framer-motion';
 import { BrowserFrame, PhoneFrame } from '../ui/DeviceFrames';
 
 // Positions for decorative cut-outs (e.g. dishes around Feather & Bone).
@@ -10,8 +11,10 @@ const FLOAT_SPOTS = [
 /**
  * Composition of a project's real screens: browser windows, phones and any
  * decorative cut-outs. Purely visual (screens are described in the case study).
+ * `parallax` optionally holds motion values ({ back, front, phone }) that move
+ * each layer at its own speed as the panel scrolls in.
  */
-export default function ProjectVisual({ project, eager = false }) {
+export default function ProjectVisual({ project, eager = false, parallax }) {
   const v = project.visual;
   if (!v) return null;
   const [front, back] = v.windows;
@@ -20,12 +23,13 @@ export default function ProjectVisual({ project, eager = false }) {
     return (
       <div className="relative flex h-full items-center justify-center gap-[6%] px-[6%] py-[4%]">
         {v.phones.map((phone, i) => (
-          <PhoneFrame
-            key={phone.src}
-            image={phone}
-            eager={eager}
-            className={`w-[38%] max-w-[15rem] ${i % 2 ? 'translate-y-[8%] rotate-[4deg]' : '-translate-y-[4%] -rotate-[4deg]'} float-slow`}
-          />
+          <m.div key={phone.src} style={{ y: i % 2 ? parallax?.front : parallax?.back }} className="w-[38%] max-w-[15rem]">
+            <PhoneFrame
+              image={phone}
+              eager={eager}
+              className={`${i % 2 ? 'translate-y-[8%] rotate-[4deg]' : '-translate-y-[4%] -rotate-[4deg]'} float-slow`}
+            />
+          </m.div>
         ))}
       </div>
     );
@@ -34,31 +38,36 @@ export default function ProjectVisual({ project, eager = false }) {
   return (
     <div className="relative h-full w-full">
       {back && (
-        <BrowserFrame
-          image={back}
-          label={v.domain}
-          dark
-          eager={eager}
-          className="absolute right-0 top-0 w-[78%] opacity-90 [transform:translate(4%,-2%)_rotate(2deg)]"
-          sizes="(min-width: 1024px) 560px, 70vw"
-        />
+        <m.div style={{ y: parallax?.back }} className="absolute right-0 top-0 w-[78%]">
+          <BrowserFrame
+            image={back}
+            label={v.domain}
+            dark
+            eager={eager}
+            className="opacity-90 [transform:translate(4%,-2%)_rotate(2deg)]"
+            sizes="(min-width: 1024px) 560px, 70vw"
+          />
+        </m.div>
       )}
       {front && (
-        <BrowserFrame
-          image={front}
-          label={v.domain}
-          dark
-          eager={eager}
-          className={`absolute ${back ? 'bottom-0 left-0 w-[86%]' : 'left-0 top-1/2 w-[88%] -translate-y-1/2'} transition-transform duration-500 group-hover:-translate-y-1`}
-          sizes="(min-width: 1024px) 620px, 82vw"
-        />
+        <m.div style={{ y: parallax?.front }} className={`absolute left-0 ${back ? 'bottom-0 w-[86%]' : 'top-1/2 w-[88%]'}`}>
+          {/* Centring lives on an inner element so the parallax transform can't override it. */}
+          <div className={back ? '' : '-translate-y-1/2'}>
+            <BrowserFrame
+              image={front}
+              label={v.domain}
+              dark
+              eager={eager}
+              className="transition-transform duration-500 ease-out group-hover:-translate-y-1.5"
+              sizes="(min-width: 1024px) 620px, 82vw"
+            />
+          </div>
+        </m.div>
       )}
       {v.phones[0] && (
-        <PhoneFrame
-          image={v.phones[0]}
-          eager={eager}
-          className="absolute bottom-[2%] right-[2%] w-[24%] max-w-[11rem] transition-transform duration-500 group-hover:-translate-y-2"
-        />
+        <m.div style={{ y: parallax?.phone }} className="absolute bottom-[2%] right-[2%] w-[24%] max-w-[11rem]">
+          <PhoneFrame image={v.phones[0]} eager={eager} className="transition-transform duration-500 ease-out group-hover:-translate-y-3 group-hover:rotate-[-2deg]" />
+        </m.div>
       )}
       {v.floating.map((src, i) => (
         <img

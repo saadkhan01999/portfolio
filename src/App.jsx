@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
 import { BackToTop, ScrollProgress } from './components/layout/ScrollUi';
+import CursorBadge from './components/ui/CursorBadge';
 import About from './components/sections/About';
 import Contact from './components/sections/Contact';
 import Hero from './components/sections/Hero';
@@ -15,6 +16,7 @@ import { useAppSelector } from './hooks/useAppDispatch';
 import { useCaseStudyUrl } from './hooks/useCaseStudyUrl';
 import { usePaletteShortcut } from './hooks/usePaletteShortcut';
 import { useRenderAllOnNavigate } from './hooks/useRenderAllOnNavigate';
+import { useMagnetic } from './hooks/useMagnetic';
 import { useSpotlightTracking } from './hooks/useSpotlightTracking';
 import { useThemeSync } from './hooks/useThemeSync';
 import { store } from './store/store';
@@ -38,6 +40,7 @@ function AppContent() {
   usePaletteShortcut();
   useCaseStudyUrl();
   useRenderAllOnNavigate();
+  useMagnetic();
   const paletteNeeded = useLatch(useAppSelector((st) => st.ui.paletteOpen));
   const caseStudyNeeded = useLatch(useAppSelector((st) => st.ui.caseStudyId));
 
@@ -62,6 +65,7 @@ function AppContent() {
       </main>
       <Footer />
       <BackToTop />
+      <CursorBadge />
       <Suspense fallback={null}>
         {paletteNeeded && <CommandPalette />}
         {caseStudyNeeded && <CaseStudy />}

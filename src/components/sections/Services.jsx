@@ -57,7 +57,7 @@ function ServicesCta() {
           </p>
         </div>
         <div className="flex shrink-0 flex-col gap-3 xs:flex-row">
-          <a href="#contact" className="btn-light group h-12 px-6">
+          <a href="#contact" data-magnetic className="btn-light group h-12 px-6">
             Start your project
             <ArrowRight size={18} aria-hidden="true" className="transition-transform group-hover:translate-x-1" />
           </a>
@@ -89,7 +89,7 @@ export default function Services() {
           }
           intro="Shop, restaurant, pharmacy, clinic, school, agency or startup — whatever you run, I build it custom, fast and mobile-responsive, ready to win you customers. Every service below is one I have already shipped in a real product."
         >
-          <a href="#contact" className="btn-primary h-12 px-6">
+          <a href="#contact" data-magnetic className="btn-primary h-12 px-6">
             Get a free quote
           </a>
         </SectionHeading>

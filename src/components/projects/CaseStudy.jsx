@@ -4,6 +4,7 @@ import { projectById, projects } from '../../data/projects';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { closeCaseStudy, openCaseStudy } from '../../store/slices/uiSlice';
 import { panelBackground } from '../../lib/panel';
+import CursorBadge from '../ui/CursorBadge';
 import Lightbox from './Lightbox';
 import ProjectGallery from './ProjectGallery';
 import ProjectImage from './ProjectImage';
@@ -63,6 +64,8 @@ export default function CaseStudy() {
       {project && (
         <div ref={scrollerRef} className="h-full overflow-y-auto overscroll-contain">
           <div className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur-xl">
+            {/* Reading progress through the case study (CSS scroll timeline; hidden where unsupported). */}
+            <div aria-hidden="true" className="cs-progress absolute inset-x-0 -bottom-px h-[2px] origin-left" style={{ backgroundImage: 'var(--grad-brand)' }} />
             <div className="container-page flex h-16 items-center justify-between gap-3">
               <button type="button" onClick={() => dialogRef.current?.close()} className="btn-ghost -ml-3">
                 <ArrowLeft size={18} aria-hidden="true" />
@@ -203,6 +206,8 @@ export default function CaseStudy() {
         </div>
       )}
 
+      {/* The dialog sits in the top layer, above the page's own cursor badge. */}
+      <CursorBadge />
       <Lightbox lockScroll={false} state={lightbox} onClose={() => setLightbox(null)} onNavigate={(index) => setLightbox((s) => (s ? { ...s, index } : s))} />
     </dialog>
   );

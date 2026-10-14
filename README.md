@@ -11,7 +11,9 @@ An optional **Express + Nodemailer** API for the contact form lives in [`backend
 ## Highlights
 
 - **Real projects, presented as products.** Adeena Traders (instalment & retail system), KSF Pharmacy System, Feather & Bone (live at featherbonepk.com) and more. Each one is an art-directed panel with a full case study: the challenge, what was built, key numbers, the stack and a screenshot carousel. Source code is not linked.
-- **Scroll storytelling.** Featured projects pin and stack as you scroll. A 3D hero showcase follows the pointer, and gradient progress lines fill with scroll.
+- **Scroll storytelling.** Featured projects pin and stack as you scroll: earlier panels recede and dim, each panel's screens settle in with parallax, and a side rail tracks which project is on screen. A 3D hero showcase follows the pointer, and gradient progress lines fill with scroll.
+- **Editorial project index.** The Work intro lists the featured projects (click to jump), and "More projects" is an index list whose rows reveal a cover that trails the cursor.
+- **Pro interaction details.** Section titles rise out of a mask, primary buttons are magnetic, a "View case study" badge follows the cursor over project visuals, and case studies show reading progress. All of it is mouse-only or switched off for reduced motion.
 - **Command palette.** Press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>K</kbd> (or <kbd>/</kbd>) to jump to a section, open a case study, switch theme, copy the email address or download the résumé.
 - **Services that sell.** Eight services (custom software, business websites, web apps & SaaS, custom design, e-commerce, portfolio sites, dashboards, mobile apps), each tied to a project where it shipped, plus what every project includes and a closing call to action.
 - **Certificates.** Course certificates show as cards in the Journey section and open full-size in a viewer.

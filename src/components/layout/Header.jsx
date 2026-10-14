@@ -143,7 +143,7 @@ export default function Header() {
             <kbd className="kbd hidden md:inline-flex">{paletteShortcut}</kbd>
           </button>
           <ThemeToggle />
-          <a href="#contact" className="btn-primary hidden h-11 lg:inline-flex">
+          <a href="#contact" data-magnetic className="btn-primary hidden h-11 lg:inline-flex">
             Let’s talk
           </a>
           <button
